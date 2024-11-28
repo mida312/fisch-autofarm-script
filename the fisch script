@@ -28,7 +28,6 @@ local Window = Rayfield:CreateWindow({
 
 local FishingTab = Window:CreateTab("Main")
 
--- Resize button toggle function
 local loopEnabled = false
 local function resizeButtonLoop()
     while loopEnabled do
@@ -59,7 +58,6 @@ FishingTab:CreateToggle({
    end,
 })
 
--- Button for Cast 100%
 FishingTab:CreateButton({
     Name = "perfect cast",
     Callback = function()
@@ -76,7 +74,6 @@ FishingTab:CreateButton({
     end
 })
 
--- Button for Reel 100%
 FishingTab:CreateButton({
     Name = "perfect reel",
     Callback = function()
@@ -93,12 +90,11 @@ local clickingEnabled = false
 
 local function startClicking()
     while clickingEnabled do
-        -- Check for a specific button or GUI element to "click"
-        local button = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("TargetButton") -- Replace "TargetButton" with the actual button name
+        local button = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("TargetButton")
         if button and button:IsA("TextButton") then
-            button.MouseButton1Click:Fire() -- Fires the click event directly
+            button.MouseButton1Click:Fire()
         end
-        wait(0.1) -- Adjust click frequency as needed
+        wait(0.1)
     end
 end
 
@@ -114,13 +110,10 @@ FishingTab:CreateToggle({
     end,
 })
 
-
---- Auto-farm toggle setup
 local farmEnabled = false
 
 local function startAutoFarm()
     while farmEnabled do
-        -- Check for and run the cast script
         local rod = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Flimsy Rod")
         if rod then
             local castArgs = { [1] = 100, [2] = 2 }
@@ -130,26 +123,23 @@ local function startAutoFarm()
             break
         end
 
-        -- Check for shakeui in PlayerGui and wait for it to disappear
         local shakeGui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("shakeui")
         if shakeGui then
             repeat wait(0.1) until not shakeGui or not shakeGui:FindFirstChild("safezone") or not shakeGui.safezone:FindFirstChild("button") or not shakeGui.safezone.button.Visible
         end
 
-        -- Check for reel in PlayerGui
         local reelGui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("reel")
         if reelGui then
-            wait(1) -- Wait 1 second before starting reel loop
+            wait(1)
             while reelGui and farmEnabled do
-                -- Fire reelfinished remote
                 local reelArgs = { [1] = 100, [2] = true }
                 local reelfinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
                 reelfinished:FireServer(unpack(reelArgs))
-                wait(0.1) -- Adjust delay as needed
-                reelGui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("reel") -- Refresh reelGui check
+                wait(0.1)
+                reelGui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("reel")
             end
         end
-        wait(1) -- Main loop delay
+        wait(1)
     end
 end
 
@@ -280,7 +270,6 @@ TeleportTab:CreateButton({
     end
 })
 
--- Custom Part
 TeleportTab:CreateButton({
     Name = "random spot in the ocean that is popular",
     Callback = function()
